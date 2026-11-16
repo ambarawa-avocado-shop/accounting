@@ -20,6 +20,7 @@ import io
 import streamlit as st
 
 from core import db
+from core.config import DB, GALAT
 from siklus import (ajp, bukbes, bukbes_ajp, daftar_akun, ekspor, jurnal_penutup, ju, neraca_lajur, neraca_saldo,
                     neraca_saldo_akhir, persediaan, saldo_awal, transaksi, laporan)
 from ui import beranda, login, tema
@@ -59,7 +60,10 @@ def main():
         siap()
     except Exception as e:
         st.error(f"Tidak bisa terhubung ke MySQL: {e}")
-        st.info("Periksa .streamlit/secrets.toml (atau core/config.py) dan pastikan MySQL menyala.")
+        st.caption(f"host={DB['host']} port={DB['port']} user={DB['user']} database={DB['database']}")
+        if GALAT:
+            st.warning(f"Secrets tidak terbaca, jadi dipakai nilai default: {GALAT}")
+        st.info("Periksa .streamlit/secrets.toml (atau Settings > Secrets di hosting) dan pastikan MySQL menyala.")
         st.stop()
     hal = st.session_state.setdefault("hal", "beranda")
     aktif = "beranda" if hal.startswith("in_") else hal

@@ -4,12 +4,12 @@ from contextlib import contextmanager
 
 import mysql.connector
 
-from core.config import DB
+from core.config import DB, SSL
 from core.konstanta import DIKUNCI
 
 
 def konek(pakai_db=True):
-    cfg = dict(DB)
+    cfg = dict(DB, **SSL)
     if not pakai_db:
         cfg.pop("database")
     return mysql.connector.connect(charset="utf8mb4", **cfg)
